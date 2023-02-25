@@ -6,7 +6,7 @@ exports.up = pgm => {
 	pgm.createTable('album', {
 		id : {
 			type: 'VARCHAR(50)',
-			primaryKey: true
+			primaryKey: true,
 		},
 		name : {
 			type : 'TEXT',
@@ -14,9 +14,11 @@ exports.up = pgm => {
 		},
 		year : {
 			type : 'integer',
-			notNull : true
+			notNull : true,
 		}
-	})
+	});
 };
 
-exports.down = pgm => {};
+exports.down = pgm => {
+	pgm.dropTable('album');
+};
