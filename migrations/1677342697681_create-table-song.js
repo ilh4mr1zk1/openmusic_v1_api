@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
 
-exports.shorthands = undefined;
-
 exports.up = pgm => {
 	pgm.createTable('song', {
 		id : {
@@ -26,7 +24,7 @@ exports.up = pgm => {
 
 		genre : {
 			type 		: 'TEXT',
-			notNull		: false
+			notNull		: true
 		},
 
 		duration : {

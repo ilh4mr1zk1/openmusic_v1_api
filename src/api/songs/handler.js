@@ -12,17 +12,53 @@ class SongsHandler {
 	}
 
 	async getSongsHandler(request, h) {
-		
+
+    let songs = [];
+		let {title = '', performer = ''} = request.query;
+    let hasil = -1;
+
 		const dataSong = await this._service.getSongs();
-    const songs = dataSong.map(detail => ({ id: detail.id, title: detail.title, performer : detail.performer }));
+    
+    const dataSongs = dataSong.map(detail => ({ id: detail.id, title: detail.title, performer : detail.performer }));
 
+    for (let i = 0; i < dataSong.length; i++) {
+      hasil = -1;
 
-	    return {
-	      status: 'success',
-	      data: {
-	        songs
-	      },
-	    };
+      if ( title !== '' || performer !== '' ) {
+
+        if ( title === dataSong[i].title || performer === dataSong[i].performer ) {
+          console.log(dataSong[i].title);
+          hasil = 1;
+        } else if ( title === dataSong[i].title && performer === dataSong[i].performer ) {
+          hasil = 2;
+        } else if ( dataSong[i].title.toLowerCase().includes(title.toLowerCase()) && title !== '' ) {
+          hasil = 3;
+        } else if ( dataSong[i].performer.toLowerCase().includes(performer.toLowerCase()) && performer !== '' ) {
+          hasil = 4;
+        }
+
+      } else {
+        hasil = 0;
+      }
+
+      if (hasil >= 0) {
+
+        songs.push({
+            id: dataSong[i].id, 
+            title: dataSong[i].title,
+            performer: dataSong[i].performer
+        });
+
+      }
+
+    }
+
+    return {
+      status: 'success',
+      data: {
+        songs
+      },
+    };
 
 	}
 
