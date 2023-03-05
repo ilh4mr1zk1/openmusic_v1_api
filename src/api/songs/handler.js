@@ -18,47 +18,109 @@ class SongsHandler {
     let hasil = -1;
 
 		const dataSong = await this._service.getSongs();
-    
-    const dataSongs = dataSong.map(detail => ({ id: detail.id, title: detail.title, performer : detail.performer }));
+    console.log(dataSong);
 
-    for (let i = 0; i < dataSong.length; i++) {
-      hasil = -1;
+    if ( title === '' && performer === '' ) {
 
-      if ( title !== '' || performer !== '' ) {
+      for (let i = 0; i < dataSong.length; i++) {
 
-        if ( title === dataSong[i].title || performer === dataSong[i].performer ) {
-          console.log(dataSong[i].title);
-          hasil = 1;
-        } else if ( title === dataSong[i].title && performer === dataSong[i].performer ) {
-          hasil = 2;
-        } else if ( dataSong[i].title.toLowerCase().includes(title.toLowerCase()) && title !== '' ) {
-          hasil = 3;
-        } else if ( dataSong[i].performer.toLowerCase().includes(performer.toLowerCase()) && performer !== '' ) {
-          hasil = 4;
+        if ( title === '' && performer === '' ) {
+
+            songs.push({
+              id: dataSong[i].id,
+              title: dataSong[i].title,
+              performer: dataSong[i].performer
+            })
+
         }
 
-      } else {
-        hasil = 0;
       }
 
-      if (hasil >= 0) {
+      return {
+        status: 'success',
+        data: {
+          songs
+        },
+      };
 
-        songs.push({
-            id: dataSong[i].id, 
-            title: dataSong[i].title,
-            performer: dataSong[i].performer
-        });
+    } else if ( title !== '' && performer === '' ) {
 
-      }
+        let lowTitle = title.toLowerCase();
+
+        for (let i = 0; i < dataSong.length; i++) {
+
+          let lowTitleSongs = dataSong[i].title.toLowerCase().includes(lowTitle);
+
+          if ( lowTitleSongs == true ) {
+            songs.push({
+                id: dataSong[i].id,
+                title: dataSong[i].title,
+                performer: dataSong[i].performer,
+            })
+          }
+
+        }
+
+        return {
+          status: 'success',
+          data: {
+            songs
+          },
+        };
+
+    } else if ( title === '' && performer !== '' ) {
+
+        let lowPerformer = performer.toLowerCase();
+
+        for (let i = 0; i < dataSong.length; i++) {
+
+            let lowPerformerSongs = dataSong[i].performer.toLowerCase().includes(lowPerformer);
+
+            if ( lowPerformerSongs === true ) {
+                songs.push({
+                    id: dataSong[i].id,
+                    title: dataSong[i].title,
+                    performer: dataSong[i].performer,
+                })
+            }
+
+        }
+
+        return {
+          status: 'success',
+          data: {
+            songs
+          },
+        };
+
+    } else if ( title !== '' && performer !== '' ) {
+
+        let lowTitle = title.toLowerCase();
+        let lowPerformer = performer.toLowerCase();
+
+        for (let i = 0; i < dataSong.length; i++) {
+
+            let lowTitleSongs = dataSong[i].title.toLowerCase().includes(lowTitle);
+            let lowPerformerSongs = dataSong[i].performer.toLowerCase().includes(lowPerformer);
+
+            if ( lowTitleSongs === true && lowPerformerSongs === true ) {
+                songs.push({
+                    id: dataSong[i].id,
+                    title: dataSong[i].title,
+                    performer: dataSong[i].performer,
+                })
+            }
+
+        }
+
+        return {
+          status: 'success',
+          data: {
+            songs
+          },
+        };
 
     }
-
-    return {
-      status: 'success',
-      data: {
-        songs
-      },
-    };
 
 	}
 

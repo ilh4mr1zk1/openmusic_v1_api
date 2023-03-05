@@ -11,9 +11,10 @@ class AlbumsService {
   }
 
   async addAlbum({ name, year }) {
-    const id = nanoid(16);
-    const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
+    // const id = nanoid(16);
+    const id = `album-${nanoid(16)}`;
+    // const createdAt = new Date().toISOString();
+    // const updatedAt = createdAt;
 
     const query = {
       text: 'INSERT INTO album VALUES($1, $2, $3) RETURNING id',
@@ -44,7 +45,11 @@ class AlbumsService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    // if (!result.rows.length) {
+    //   throw new NotFoundError('Album tidak ditemukan');
+    // }
+
+    if ( !result.rowCount ) {
       throw new NotFoundError('Album tidak ditemukan');
     }
  

@@ -1,4 +1,4 @@
-const ClientError = require('../../exceptions/ClientError');
+// const ClientError = require('../../exceptions/ClientError');
 const autoBind = require('auto-bind');
 
 class AlbumsHandler {
@@ -16,7 +16,8 @@ class AlbumsHandler {
     this._validator.validateAlbumPayload(request.payload);
     const { name, year } = request.payload;
 
-    const albumId = await this._service.addAlbum({ name, year });
+    // const albumId = await this._service.addAlbum({ name, year });
+    const albumId = await this._service.addAlbum(request.payload);
 
     const response = h.response({
       status: 'success',
@@ -37,11 +38,12 @@ class AlbumsHandler {
 
     const album = await this._service.getAlbumById(albumId);
     const song = await this._service.getSongs();
-
+    // console.log(song[id]);
     const checkDataSong = song.filter((sg) => sg.albumId === albumId).length > 0;
-    console.log(checkDataSong);
+    // console.log(checkDataSong);
     const getDataSong = song.filter((sg) => sg.albumId === albumId);
-    const songs = getDataSong.map(detail => ({ id: detail.id, title: detail.title, performer : detail.performer }));
+
+    const songs = getDataSong.map(detail => ({ id: detail.id, title: detail.title, performer : detail.performer }));  
 
     if (checkDataSong) {
       album.songs = songs
